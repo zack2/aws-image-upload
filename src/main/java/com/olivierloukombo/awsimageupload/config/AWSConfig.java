@@ -3,6 +3,7 @@ package com.olivierloukombo.awsimageupload.config;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -20,6 +21,7 @@ public class AWSConfig {
         return AmazonS3ClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .withRegion(Regions.EU_CENTRAL_1)
                 .build();
 
     }
