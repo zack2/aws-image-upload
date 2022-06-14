@@ -43,9 +43,20 @@ public class UserProfileService {
         String fileName = String.format("%s-%s", file.getOriginalFilename(), userProfile.getUserId());
         try {
             fileStoreService.save(path,  fileName, Optional.of(metaData), file.getInputStream());
+            userProfile.setImageLink(fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    public byte[] downloadUserProfilImage(UUID userProfileId) {
+        UserProfile userProfile = getUserProfile(userProfileId);
+        String path = String.format("%s/%s",
+                BucketName.PROFILE_IMAGE.getBucketName(),
+                userProfile.getUserId());
+        return userProfile.getImageLink()
+                .map( key -> fileStoreService.download(path, key))
+                .orElse(new byte[0]);
+
     }
 
     private Map<String, String> extractMetaData(MultipartFile file) {
@@ -78,4 +89,6 @@ public class UserProfileService {
             throw new IllegalStateException("there is not file [ " + file.getSize() + " ] ");
         }
     }
+
+
 }
